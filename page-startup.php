@@ -25,7 +25,7 @@ get_header();
 					<h1 style="margin-bottom: 2rem;"><?php echo esc_html( $content['hero_title'] ); ?></h1>
 					
 					<!-- Text Rotator - Left Aligned with Title, Centered Block -->
-					<div class="hero__rotator" style="margin: 3rem 0 3.5rem; display: flex; justify-content: center; align-items: center; gap: 0.5em; opacity: 0.9; width: 100%; white-space: nowrap; flex-wrap: nowrap !important;">
+					<div class="hero__rotator" style="margin: 3rem 0 3.5rem; opacity: 0.9; text-align: center; width: 100%;">
 						<span style="font-size: var(--rotator-prefix-size);"><?php echo esc_html( $content['hero_copy'] ); ?></span> 
 						<?php 
 						$phrases = array_map('trim', explode(',', $content['rotating_phrases']));

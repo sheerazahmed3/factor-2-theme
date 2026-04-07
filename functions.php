@@ -54,6 +54,7 @@ add_action('after_setup_theme', 'factor_2_setup');
 function factor_2_create_essential_pages()
 {
 	$pages_to_create = array(
+			array('title' => 'Home', 'template' => 'default'),
 			array('title' => 'Contact', 'template' => 'page-contact.php'),
 			array('title' => 'Startup', 'template' => 'page-startup.php'),
 			array('title' => 'AI Development', 'template' => 'page-ai-development.php'),
@@ -116,6 +117,53 @@ function factor_2_create_essential_pages()
 	}
 }
 add_action('init', 'factor_2_create_essential_pages');
+
+/**
+ * Self-Repair: Automatically configure the static homepage and reset the template.
+ * This ensures the custom front-page design loads instead of fallback/contact templates.
+ */
+function factor_2_auto_setup_homepage()
+{
+	// 1. Attempt to find a page to use as the homepage.
+	// Look for 'Home' or 'Homepage' titles first.
+	$target_page = get_page_by_title('Home');
+	if (!$target_page) {
+		$target_page = get_page_by_title('Homepage');
+	}
+
+	// 2. If 'Home' isn't found, try finding any page with "Home" in the title.
+	if (!$target_page) {
+		$all_pages = get_pages(array(
+			'number' => 20,
+			'sort_column' => 'ID',
+			'sort_order' => 'ASC',
+			'post_status' => 'publish',
+		));
+		foreach ($all_pages as $p) {
+			if (stripos($p->post_title, 'Home') !== false) {
+				$target_page = $p;
+				break;
+			}
+		}
+	}
+
+	// 3. Configure the Reading Settings if a target page was found.
+	if ($target_page && is_object($target_page)) {
+		update_option('show_on_front', 'page');
+		update_option('page_on_front', $target_page->ID);
+
+		// 4. IMPORTANT: Reset the page template to 'default'.
+		// This forces WordPress to use the theme's front-page.php logic.
+		update_post_meta($target_page->ID, '_wp_page_template', 'default');
+	}
+
+	// 5. FORCE CACHE PURGE (For Hostinger/LiteSpeed)
+	if (defined('LSCWP_VERSION')) {
+		do_action('litespeed_purge_all');
+	}
+}
+// Using a higher priority (20) to ensure it runs after page creation logic.
+add_action('init', 'factor_2_auto_setup_homepage', 20);
 
 /**
  * Enqueue fonts, stylesheet, and navigation script.

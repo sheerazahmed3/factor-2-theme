@@ -28,7 +28,7 @@ get_header();
 				</h1>
 
 				<!-- Text Rotator - Swipe/Slide Style -->
-				<div class="hero__rotator" style="margin: 3rem 0 3.5rem; display: flex; justify-content: center; align-items: baseline; gap: 0.4em; opacity: 0.9;">
+				<div class="hero__rotator" style="margin: 3rem 0 3.5rem; opacity: 0.9; text-align: center;">
 					<span>EXPERTS AT BUILDING SCALABLE AND QUALITY SOLUTIONS THAT</span> 
 					<?php 
 					$rotating_phrases_raw = get_theme_mod('f2_rotating_phrases', 'CONVERT BETTER,EXCEED EXPECTATIONS,DELIGHT CUSTOMERS');

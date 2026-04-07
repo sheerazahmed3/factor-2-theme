@@ -182,6 +182,12 @@ p {
   box-shadow: 0 6px 20px rgba(145, 199, 61, 0.4);
 }
 
+.button-link--primary:active {
+  transform: translateY(0);
+  background-color: #6a922d;
+  box-shadow: 0 2px 8px rgba(145, 199, 61, 0.4);
+}
+
 .button-link--ghost {
   background-color: transparent;
   border-color: var(--text-primary);
@@ -191,6 +197,11 @@ p {
 .button-link--ghost:hover {
   background-color: var(--text-primary);
   color: var(--text-inverse);
+}
+
+.button-link--ghost:active {
+  transform: scale(0.98);
+  opacity: 0.8;
 }
 
 /* For dark backgrounds */
@@ -470,7 +481,11 @@ p {
   letter-spacing: 0.5px !important;
   line-height: 1.4em !important;
   font-size: var(--rotator-prefix-size) !important;
-  flex-wrap: wrap; /* Allows wrapping on small screens */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.4em;
 }
 
 .text-rotator {
@@ -1127,6 +1142,14 @@ p {
   font-size: 1rem;
 }
 
+/* Ensure header is solid when mobile menu is open */
+body.nav-is-open .site-header {
+  background: #ffffff !important;
+  opacity: 1 !important;
+  backdrop-filter: none;
+}
+
+
 /* ==========================================================================
    12. Responsive Styles
    ========================================================================== */
@@ -1138,26 +1161,76 @@ p {
     left: 0;
     width: 100%;
     height: calc(100vh - var(--header-height));
-    background-color: var(--bg-primary);
-    padding: 2rem;
-    box-shadow: var(--shadow-md);
+    background-color: #ffffff !important;
+    padding: 2rem 1.25rem;
+    box-shadow: none;
     flex-direction: column;
     align-items: flex-start;
-    border-top: 1px solid var(--border-light);
+    border-top: 1px solid #f0f0f0;
     z-index: 1000;
+    overflow-y: auto;
   }
 
   .site-navigation.is-open {
     display: flex;
+    animation: slideDownFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideDownFade {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .site-navigation__list {
     flex-direction: column;
     width: 100%;
-    gap: 1.5rem;
+    gap: 0; /* Use padding for larger hit areas */
   }
 
-  /* Sub-menu on mobile */
+  .site-navigation__list > li {
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+    width: 100%;
+  }
+
+  .site-navigation__list > li:last-child {
+    border-bottom: none;
+  }
+
+  .site-navigation__list a {
+    display: flex;
+    padding: 1.25rem 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    border: none !important; /* Reset any desktop button styles */
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .site-navigation__list .menu-item-cta a {
+    color: var(--accent-primary);
+  }
+
+  .site-navigation__list .menu-item-cta a::after {
+    content: '→';
+    margin-left: 0.5rem;
+  }
+
+  .dropdown-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+  }
+
+  .menu-item-has-children.is-open .dropdown-icon {
+    transform: rotate(180deg);
+  }
+
+
+  /* Sub-menu on mobile - Clean Hierarchy */
   .sub-menu {
     position: static;
     transform: none;
@@ -1165,11 +1238,26 @@ p {
     visibility: visible;
     pointer-events: auto;
     box-shadow: none;
-    border: none;
-    padding: 0.5rem 0 0 1rem;
-    min-width: 100%;
-    display: flex;
+    border-left: 1px solid #eee; /* Clean branch line */
+    padding: 0 0 1rem 1.5rem;
+    margin-bottom: 1rem;
+    margin-left: 0.5rem;
+    display: none;
     flex-direction: column;
+    background: transparent;
+  }
+
+  .sub-menu a {
+    padding: 0.75rem 0;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border: none;
+  }
+
+
+  .menu-item-has-children.is-open .sub-menu {
+    display: flex;
   }
 
   .menu-item-has-children:hover .sub-menu {
@@ -1184,13 +1272,13 @@ p {
     display: flex;
   }
 
-  .nav-toggle[aria-expanded="true"] span:nth-of-type(1) {
+  .nav-toggle[aria-expanded="true"] span:nth-of-type(2) {
     transform: translateY(7px) rotate(45deg);
   }
-  .nav-toggle[aria-expanded="true"] span:nth-of-type(2) {
+  .nav-toggle[aria-expanded="true"] span:nth-of-type(3) {
     opacity: 0;
   }
-  .nav-toggle[aria-expanded="true"] span:nth-of-type(3) {
+  .nav-toggle[aria-expanded="true"] span:nth-of-type(4) {
     transform: translateY(-7px) rotate(-45deg);
   }
   
@@ -1210,8 +1298,9 @@ p {
   
   .hero__rotator {
     margin: 2rem 0 2.5rem !important;
-    gap: 0.2em;
+    gap: 0.3em;
     justify-content: center;
+    align-items: center; /* Use center alignment when stacked */
     text-align: center;
   }
 
@@ -1222,7 +1311,7 @@ p {
   .text-rotator__item {
     justify-content: center;
     text-align: center;
-    white-space: normal; /* Allow text inside rotator to wrap if absolutely necessary, though usually phrases are short */
+    white-space: nowrap; /* MUST be nowrap to maintain 1.4em slide height */
   }
 }
 
