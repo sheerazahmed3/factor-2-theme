@@ -65,10 +65,31 @@ get_header();
 		<div class="container">
 			<div class="service-stack">
 				<?php foreach ( $content['services'] as $index => $service ) : ?>
+					<?php
+					// Designed illustrations for each service (used when the file exists), matched by the service title.
+					$service_image = $service['image'];
+					$illustrations = array(
+						'/full[\s-]?stack/i' => 'full-stack-development',
+						'/front[\s-]?end/i'  => 'frontend-development',
+						'/back[\s-]?end/i'   => 'backend-development',
+						'/\bapi\b/i'         => 'api-integrations',
+						'/cloud/i'           => 'cloud-architecture',
+						'/support|maintenance/i' => 'support-maintenance',
+					);
+					foreach ( $illustrations as $pattern => $file ) {
+						if ( preg_match( $pattern, $service['title'] ) ) {
+							$new_image = '/assets/images/web/' . $file . '.webp';
+							if ( file_exists( get_template_directory() . $new_image ) ) {
+								$service_image = get_template_directory_uri() . $new_image;
+							}
+							break;
+						}
+					}
+					?>
 					<article class="service-row<?php echo 1 === $index % 2 ? ' service-row--reverse' : ''; ?>">
 						<div class="service-row__media">
-							<?php if ( ! empty( $service['image'] ) ) : ?>
-								<img src="<?php echo esc_url( $service['image'] ); ?>" alt="<?php echo esc_attr( $service['title'] ); ?>" class="service-row__image">
+							<?php if ( ! empty( $service_image ) ) : ?>
+								<img src="<?php echo esc_url( $service_image ); ?>" alt="<?php echo esc_attr( $service['title'] ); ?>" class="service-row__image">
 							<?php else : ?>
 								<div class="service-row__image-placeholder"></div>
 							<?php endif; ?>

@@ -2819,3 +2819,35 @@ body.nav-is-open .site-header {
     padding: 1.5rem;
   }
 }
+
+
+/* Web Development page: same service rows as before, just more compact */
+.web-development-page .service-stack {
+  gap: 2.5rem !important;
+  margin-top: 1.5rem !important;
+}
+
+.web-development-page .service-stack .service-row {
+  grid-template-columns: 420px minmax(0, 1fr) !important;
+  gap: 2.5rem !important;
+}
+
+.web-development-page .service-stack .service-row__media {
+  min-height: 0 !important;
+}
+
+.web-development-page .service-row__content h2 {
+  margin-bottom: 1rem;
+  font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+}
+
+@media (max-width: 991px) {
+  .web-development-page .service-stack {
+    gap: 2.25rem !important;
+  }
+
+  .web-development-page .service-stack .service-row {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1.25rem !important;
+  }
+}
