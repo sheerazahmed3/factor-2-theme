@@ -2586,3 +2586,236 @@ body.nav-is-open .site-header {
     flex-wrap: wrap;
   }
 }
+
+
+/* ==========================================================================
+   AI Development page: compact "Our Offerings" tabs (same layout, tidier look)
+   ========================================================================== */
+@keyframes offeringFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.ai-offers {
+  background: var(--bg-secondary);
+  padding: 4.5rem 0;
+}
+
+.ai-offers__grid {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  gap: 3rem;
+  align-items: start;
+}
+
+.ai-offers__nav,
+.ai-offers__card {
+  min-width: 0;
+}
+
+.ai-offers__title {
+  position: relative;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.9rem;
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.ai-offers__title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 48px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--accent-primary);
+}
+
+.ai-offers .offerings-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.ai-offers .offering-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  text-align: left;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.ai-offers .offering-link:hover {
+  background: rgba(145, 199, 61, 0.14);
+  color: var(--text-primary);
+}
+
+.ai-offers .offering-link:focus-visible {
+  outline: 2px solid var(--accent-text);
+  outline-offset: 2px;
+}
+
+.ai-offers .offering-item.active .offering-link {
+  background: #eefad6;
+  color: var(--accent-text);
+  box-shadow: inset 3px 0 0 var(--accent-primary);
+}
+
+.ai-offers .offering-arrow {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.ai-offers .offering-item.active .offering-arrow {
+  opacity: 1;
+  transform: none;
+}
+
+.ai-offers__card {
+  position: sticky;
+  top: 110px;
+  padding: 2rem;
+  background: #f7ffe8;
+  border: 1px solid rgba(145, 199, 61, 0.42);
+  border-radius: 18px;
+  box-shadow: 0 12px 28px rgba(145, 199, 61, 0.1);
+}
+
+.ai-offers .offering-pane {
+  display: none;
+}
+
+.ai-offers .offering-pane.active {
+  display: block;
+  animation: offeringFadeIn 0.35s ease;
+}
+
+.ai-offers__card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.ai-offers__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: rgba(145, 199, 61, 0.25);
+  color: var(--accent-text);
+}
+
+.ai-offers__count {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+.ai-offers .offering-pane h3 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+  line-height: 1.2;
+  color: var(--text-primary);
+}
+
+.ai-offers .offering-pane p {
+  max-width: 620px;
+  margin: 0 0 1.5rem;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.ai-offers__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--accent-primary);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.ai-offers__cta:hover {
+  background: var(--accent-primary);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .ai-offers {
+    padding: 3rem 0;
+  }
+
+  .ai-offers__grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+
+  /* Tabs become wrapping chips above the card */
+  .ai-offers .offerings-list {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    margin-right: -1.25rem;
+    padding-right: 1.25rem;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ai-offers .offering-item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .ai-offers .offering-link {
+    width: auto;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--border-light);
+    border-radius: 999px;
+    background: #ffffff;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+
+  .ai-offers .offering-item.active .offering-link {
+    border-color: var(--accent-primary);
+    box-shadow: none;
+  }
+
+  .ai-offers .offering-arrow {
+    display: none;
+  }
+
+  .ai-offers__card {
+    position: static;
+    padding: 1.5rem;
+  }
+}

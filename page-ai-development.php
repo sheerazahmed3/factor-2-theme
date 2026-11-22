@@ -76,167 +76,104 @@ get_header();
 
 	
 	<!-- Our Offerings Section -->
-	<section class="section offerings-section" style="background: var(--bg-secondary); padding: 10rem 0; color: #1e293b; position: relative; overflow: hidden;">
+	<?php if ( ! empty( $content['offerings_items'] ) ) : ?>
+	<?php
+	$offers      = array();
+	foreach ( $content['offerings_items'] as $offering ) {
+		$clean = static function ( $text ) {
+			return rtrim( trim( (string) $text ), " -\xE2\x80\x93\xE2\x80\x94" );
+		};
+		$label = $clean( ! empty( $offering['label'] ) ? $offering['label'] : $offering['title'] );
+		$title = $clean( ! empty( $offering['title'] ) ? $offering['title'] : $offering['label'] );
+		if ( '' === $label && '' === $title ) {
+			continue;
+		}
+		$desc = preg_replace( '/\.{2,}$/', '.', trim( (string) $offering['desc'] ) );
+		if ( '' === $desc || 0 === strcasecmp( $desc, $title ) ) {
+			/* translators: %s: service name */
+			$desc = sprintf( __( 'Talk to our team about %s for your business.', 'factor-2' ), $title ? $title : $label );
+		}
+		$link_text = $clean( ! empty( $offering['link_text'] ) ? $offering['link_text'] : '' );
+		$offers[]  = array(
+			'label' => $label ? $label : $title,
+			'title' => $title ? $title : $label,
+			'desc'  => $desc,
+			'url'   => factor_2_ai_offering_url( isset( $offering['url'] ) ? $offering['url'] : '' ),
+			'link'  => $link_text ? $link_text : __( 'Get in touch', 'factor-2' ),
+		);
+	}
+	$offers_total = count( $offers );
+	?>
+	<section class="section offerings-section ai-offers" id="offerings">
 		<div class="container">
-			<div class="offerings-grid" style="display: grid; grid-template-columns: 350px 1fr; gap: 8rem; align-items: start;">
-				
-				<!-- Sidebar Navigation -->
-				<div class="offerings-nav">
-					<h2 style="font-size: 3.3rem; margin-bottom: 4rem; font-weight: 800; color: #91c73d !important;"><?php echo esc_html($content['offerings_title']); ?></h2>
-					<ul class="offerings-list" style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1.5rem;">
-						<?php if (!empty($content['offerings_items'])): ?>
-							<?php foreach ($content['offerings_items'] as $index => $offering): ?>
-								<li class="offering-item <?php echo $index === 0 ? 'active' : ''; ?>" 
-									data-index="<?php echo $index; ?>"
-									style="cursor: pointer; position: relative; padding-right: 2rem; transition: all 0.3s ease;">
-									<a href="javascript:void(0)" class="offering-link" style="font-size: 1.25rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 0.75rem; transition: all 0.3s ease;">
-										<span class="offering-label-text"><?php echo esc_html($offering['label']); ?></span>
-										<span class="offering-arrow" style="opacity: 0; transform: translateX(-10px); transition: all 0.3s ease;">→</span>
-									</a>
-								</li>
-							<?php endforeach; ?>
-						<?php endif; ?>
+			<div class="ai-offers__grid">
+
+				<!-- Service list -->
+				<div class="ai-offers__nav">
+					<h2 class="ai-offers__title"><?php echo esc_html( $content['offerings_title'] ); ?></h2>
+					<ul class="offerings-list" role="tablist" aria-label="<?php echo esc_attr( $content['offerings_title'] ); ?>">
+						<?php foreach ( $offers as $index => $offer ) : ?>
+							<li class="offering-item<?php echo 0 === $index ? ' active' : ''; ?>" data-index="<?php echo (int) $index; ?>" role="presentation">
+								<button type="button" class="offering-link" role="tab" id="offering-tab-<?php echo (int) $index; ?>" aria-controls="offering-pane-<?php echo (int) $index; ?>" aria-selected="<?php echo 0 === $index ? 'true' : 'false'; ?>">
+									<span class="offering-label-text"><?php echo esc_html( $offer['label'] ); ?></span>
+									<span class="offering-arrow" aria-hidden="true">&rarr;</span>
+								</button>
+							</li>
+						<?php endforeach; ?>
 					</ul>
 				</div>
 
-				<!-- Content Area -->
-				<div class="offerings-content-wrap" style="position: relative; min-height: 400px; border: 1px solid var(--border-light) !important; border-radius: 1.5rem; padding: 4rem; background: #f7ffe8 !important; box-shadow: var(--shadow-lg);">
-					<!-- Decorative background element removed for consistency -->
-					
-					<?php if (!empty($content['offerings_items'])): ?>
-						<?php foreach ($content['offerings_items'] as $index => $offering): ?>
-							<div class="offering-pane <?php echo $index === 0 ? 'active' : ''; ?>" 
-								 id="offering-pane-<?php echo $index; ?>"
-								 style="display: <?php echo $index === 0 ? 'block' : 'none'; ?>; animation: offeringFadeIn 0.5s ease forwards; z-index: 1; position: relative;">
-								
-								<div class="offering-grid-inner" style="display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center;">
-									<div class="offering-text-side">
-										<h3 style="font-size: 2.5rem; margin-bottom: 2rem; color: var(--text-primary); font-weight: 700;"><?php echo esc_html($offering['title']); ?></h3>
-										<p style="font-size: 1.2rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 3.5rem; max-width: 800px;">
-											<?php echo esc_html($offering['desc']); ?>
-										</p>
-										<a href="<?php echo esc_url($offering['url']); ?>" class="button-link" style="display: inline-flex; align-items: center; gap: 0.75rem; color: var(--text-primary); text-decoration: none; font-weight: 700; border: 2px solid #91C73D; padding: 1rem 2.5rem; border-radius: 100px; transition: all 0.3s ease; background: transparent;">
-											<span><?php echo esc_html(!empty($offering['link_text']) ? $offering['link_text'] : 'Learn More'); ?></span>
-											<span style="font-size: 1.2rem;">→</span>
-										</a>
-									</div>
-								</div>
+				<!-- Selected service card -->
+				<div class="ai-offers__card">
+					<?php foreach ( $offers as $index => $offer ) : ?>
+						<div class="offering-pane<?php echo 0 === $index ? ' active' : ''; ?>" id="offering-pane-<?php echo (int) $index; ?>" role="tabpanel" aria-labelledby="offering-tab-<?php echo (int) $index; ?>">
+							<div class="ai-offers__card-top">
+								<span class="ai-offers__icon" aria-hidden="true"><?php echo factor_2_ai_icon_svg( $offer['title'], 24 ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+								<span class="ai-offers__count"><?php echo esc_html( sprintf( '%02d / %02d', $index + 1, $offers_total ) ); ?></span>
 							</div>
-						<?php endforeach; ?>
-					<?php endif; ?>
+							<h3><?php echo esc_html( $offer['title'] ); ?></h3>
+							<p><?php echo esc_html( $offer['desc'] ); ?></p>
+							<a href="<?php echo esc_url( $offer['url'] ); ?>" class="ai-offers__cta">
+								<span><?php echo esc_html( $offer['link'] ); ?></span>
+								<span aria-hidden="true">&rarr;</span>
+							</a>
+						</div>
+					<?php endforeach; ?>
 				</div>
 
 			</div>
 		</div>
 	</section>
 
-	<style>
-		@keyframes offeringFadeIn {
-			from { opacity: 0; transform: translateY(20px); }
-			to { opacity: 1; transform: translateY(0); }
-		}
-
-		.offering-item.active .offering-link {
-			color: #91C73D !important;
-		}
-		
-		.offering-item.active .offering-arrow {
-			opacity: 1 !important;
-			transform: translateX(0) !important;
-			color: #91C73D;
-		}
-
-		.offering-item:hover .offering-link {
-			color: var(--text-primary) !important;
-		}
-
-		.offering-item .offering-link {
-			border-bottom: 3px solid transparent;
-			padding-bottom: 0.5rem;
-			display: inline-block;
-			color: var(--text-secondary);
-		}
-
-		.offering-item.active .offering-link {
-			color: #91C73D !important;
-			border-bottom-color: #91C73D;
-		}
-
-		.offerings-section .button-link:hover {
-			background: #91C73D;
-			border-color: #91C73D !important;
-			color: #fff !important;
-		}
-
-		@media (max-width: 1024px) {
-			.offerings-grid {
-				grid-template-columns: 1fr !important;
-				gap: 4rem !important;
-			}
-			.offerings-nav h2 {
-				text-align: center;
-			}
-			.offerings-list {
-				flex-direction: row !important;
-				flex-wrap: wrap;
-				justify-content: center;
-				gap: 1rem !important;
-			}
-			.offering-item {
-				padding-right: 0 !important;
-			}
-			.offering-arrow {
-				display: none !important;
-			}
-			.offering-grid-inner {
-				grid-template-columns: 1fr !important;
-				gap: 3rem !important;
-				text-align: center;
-			}
-			.offering-text-side p {
-				margin-left: auto;
-				margin-right: auto;
-			}
-			.offering-image-side {
-				order: -1;
-			}
-		}
-	</style>
-
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
-			const items = document.querySelectorAll('.offering-item');
-			const panes = document.querySelectorAll('.offering-pane');
-
+			const items = document.querySelectorAll('.ai-offers .offering-item');
+			const panes = document.querySelectorAll('.ai-offers .offering-pane');
 			if (items.length === 0) return;
 
-			items.forEach(item => {
-				item.addEventListener('click', function() {
-					const index = this.getAttribute('data-index');
+			function select(index) {
+				items.forEach(function(i) {
+					const on = i.getAttribute('data-index') === String(index);
+					i.classList.toggle('active', on);
+					i.querySelector('.offering-link').setAttribute('aria-selected', on ? 'true' : 'false');
+				});
+				panes.forEach(function(p) {
+					p.classList.toggle('active', p.id === 'offering-pane-' + index);
+				});
+			}
 
-					// Update active nav
-					items.forEach(i => i.classList.remove('active'));
-					this.classList.add('active');
-
-					// Update active pane
-					panes.forEach(p => {
-						p.style.display = 'none';
-						p.classList.remove('active');
-					});
-					
-					const activePane = document.getElementById(`offering-pane-${index}`);
-					if (activePane) {
-						activePane.style.display = 'block';
-						// Trigger animation
-						activePane.style.animation = 'none';
-						activePane.offsetHeight; // force reflow
-						activePane.style.animation = null;
+			items.forEach(function(item) {
+				item.querySelector('.offering-link').addEventListener('click', function() {
+					select(item.getAttribute('data-index'));
+					// On phones the tabs scroll sideways: keep the chosen one in view
+					if (window.innerWidth <= 900) {
+						item.scrollIntoView({ inline: 'center', block: 'nearest', behavior: 'smooth' });
 					}
 				});
 			});
 		});
 	</script>
-
+	<?php endif; ?>
 
 	<!-- Contact Section -->
 	<section class="section contact-section" id="contact-section">

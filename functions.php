@@ -1140,3 +1140,77 @@ function factor_2_quick_link_url( $label ) {
 
 	return site_url( $path );
 }
+
+/**
+ * AI page: turn a saved offering URL into a working link (placeholders and "#" go to the contact page).
+ */
+function factor_2_ai_offering_url( $url ) {
+	$url = trim( (string) $url );
+	if ( '' === $url || 0 === strpos( $url, '#' ) ) {
+		return home_url( '/contact/' );
+	}
+	if ( 0 === strpos( $url, '/' ) && 0 !== strpos( $url, '//' ) ) {
+		return home_url( $url );
+	}
+	return $url;
+}
+
+/**
+ * AI page: line icon (SVG markup) chosen from a service label.
+ */
+function factor_2_ai_icon_svg( $label, $size = 22 ) {
+	$l = strtolower( (string) $label );
+
+	$icons = array(
+		'chatbot'    => '<path d="M21 12a8 8 0 0 1-8 8H6l-3 3V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/><path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/>',
+		'nlp'        => '<path d="M4 7V4h16v3"/><path d="M12 4v16M9 20h6"/>',
+		'vision'     => '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+		'ml'         => '<circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M7.5 7.5L11 16.5M16.5 7.5L13 16.5M8 6h8"/>',
+		'analytics'  => '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+		'generative' => '<path d="M12 3l1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8L12 3z"/><path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z"/>',
+		'consumer'   => '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.8 0 5 1.8 5 5"/>',
+		'data'       => '<ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6"/><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"/>',
+		'integration'=> '<path d="M9 7V3M15 7V3M7 7h10v4a5 5 0 0 1-10 0V7z"/><path d="M12 16v5"/>',
+		'product'    => '<path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/>',
+		'strategy'   => '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/>',
+		'software'   => '<path d="M8 8l-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/>',
+		'managed'    => '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/><path d="M9 12l2 2 4-4"/>',
+		'default'    => '<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
+	);
+
+	if ( false !== strpos( $l, 'chatbot' ) ) {
+		$key = 'chatbot';
+	} elseif ( false !== strpos( $l, 'language' ) || preg_match( '/\bnlp\b/', $l ) ) {
+		$key = 'nlp';
+	} elseif ( false !== strpos( $l, 'vision' ) ) {
+		$key = 'vision';
+	} elseif ( false !== strpos( $l, 'machine' ) ) {
+		$key = 'ml';
+	} elseif ( false !== strpos( $l, 'predictive' ) || false !== strpos( $l, 'analytic' ) ) {
+		$key = 'analytics';
+	} elseif ( false !== strpos( $l, 'generative' ) ) {
+		$key = 'generative';
+	} elseif ( false !== strpos( $l, 'consumer' ) ) {
+		$key = 'consumer';
+	} elseif ( false !== strpos( $l, 'data' ) ) {
+		$key = 'data';
+	} elseif ( false !== strpos( $l, 'integration' ) ) {
+		$key = 'integration';
+	} elseif ( false !== strpos( $l, 'product' ) ) {
+		$key = 'product';
+	} elseif ( false !== strpos( $l, 'strategy' ) || false !== strpos( $l, 'consult' ) ) {
+		$key = 'strategy';
+	} elseif ( false !== strpos( $l, 'software' ) || false !== strpos( $l, 'development' ) ) {
+		$key = 'software';
+	} elseif ( false !== strpos( $l, 'managed' ) ) {
+		$key = 'managed';
+	} else {
+		$key = 'default';
+	}
+
+	return '<svg width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $icons[ $key ] . '</svg>';
+}
+
+function factor_2_ai_icon( $label ) {
+	return '<span class="service-card__icon" aria-hidden="true">' . factor_2_ai_icon_svg( $label, 22 ) . '</span>';
+}
