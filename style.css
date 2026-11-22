@@ -2202,7 +2202,9 @@ body.nav-is-open .site-header {
 }
 
 /* Phone image has transparent edges: show it whole on the coloured tile */
-.hero__tile--blue img {
+.hero__tile--blue img,
+.hero__tile--purple img,
+.hero__tile--red img {
   object-fit: contain;
 }
 

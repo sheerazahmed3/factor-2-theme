@@ -62,7 +62,9 @@ get_header();
 					</div>
 					<div class="hero__col hero__col--offset">
 						<figure class="hero__tile hero__tile--purple"></figure>
-						<figure class="hero__tile hero__tile--red"></figure>
+						<figure class="hero__tile hero__tile--red">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-4.png' ); ?>" alt="<?php esc_attr_e( 'Restaurant management app on a phone', 'factor-2' ); ?>" width="792" height="645" decoding="async">
+						</figure>
 					</div>
 				</div>
 		</section>
