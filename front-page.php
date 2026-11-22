@@ -29,7 +29,8 @@ get_header();
 
 				<!-- Text Rotator - Swipe/Slide Style -->
 				<div class="hero__rotator" style="margin: 3rem 0 3.5rem; opacity: 0.9; text-align: center;">
-					<span>EXPERTS AT BUILDING SCALABLE AND QUALITY SOLUTIONS THAT</span> 
+					<span>EXPERTS AT BUILDING SCALABLE AND QUALITY SOLUTIONS</span>
+					<span class="hero__rotator-line"><span>THAT</span> 
 					<?php 
 					$rotating_phrases_raw = get_theme_mod('f2_rotating_phrases', 'CONVERT BETTER,EXCEED EXPECTATIONS,DELIGHT CUSTOMERS');
 					$phrases = array_map('trim', explode(',', $rotating_phrases_raw));
@@ -43,7 +44,8 @@ get_header();
 							<span class="text-rotator__item"><?php echo esc_html($phrases[0]); ?></span>
 						</span>
 					</span>
-				</div>
+				</span>
+					</div>
 
 				<div class="hero__actions">
 				<a class="button-link button-link--primary" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php echo esc_html( $content['hero_cta_text'] ); ?></a>

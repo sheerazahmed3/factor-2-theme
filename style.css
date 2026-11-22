@@ -2570,3 +2570,19 @@ body.nav-is-open .site-header {
 .hero.has-video-bg .text-rotator__item {
   color: #a6d65a;
 }
+
+
+/* Homepage hero: keep "THAT" and the rotating phrase together on one line */
+.hero__rotator-line {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  gap: 0.4em;
+  max-width: 100%;
+}
+
+@media (max-width: 360px) {
+  .hero__rotator-line {
+    flex-wrap: wrap;
+  }
+}
