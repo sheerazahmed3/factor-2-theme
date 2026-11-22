@@ -51,7 +51,7 @@ get_header();
 				<h1><?php echo esc_html( $content['hero_title'] ); ?></h1>
 				
 				<!-- Text Rotator - Swipe/Slide Style -->
-				<div class="hero__rotator" style="margin: 3rem 0 3.5rem; display: flex; justify-content: center; align-items: baseline; gap: 0.4em; opacity: 0.9; width: fit-content; margin-left: auto; margin-right: auto; white-space: nowrap; flex-wrap: nowrap;">
+				<div class="hero__rotator" style="margin: 3rem 0 3.5rem; opacity: 0.9; text-align: center;">
 					<span style="font-size: var(--rotator-prefix-size);"><?php echo esc_html( $content['hero_copy'] ); ?></span> 
 					<?php 
 					$phrases = array_map('trim', explode(',', $content['rotating_phrases']));

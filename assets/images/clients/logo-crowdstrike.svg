@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210 60" fill="none" height="38">
+  <g transform="translate(6, 11)">
+    <path d="M14 2L2 14l12 12 12-12L14 2z" fill="#e53e3e"/>
+    <path d="M14 8L8 14l6 6 6-6-6-6z" fill="#ffffff"/>
+  </g>
+  <text x="38" y="37" font-family="'Manrope', -apple-system, BlinkMacSystemFont, sans-serif" font-size="16" font-weight="900" fill="#1a202c" letter-spacing="-0.3px">CROWDSTRIKE</text>
+</svg>

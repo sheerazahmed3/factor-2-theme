@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270 65" fill="none" height="46">
+  <!-- IBA Karachi Emblem -->
+  <g transform="translate(6, 6)">
+    <!-- Maroon Shield -->
+    <path d="M26 3L6 9v19c0 15 9.5 24 20 27 10.5-3 20-12 20-27V9L26 3z" fill="#7a162b"/>
+    <path d="M26 6L9 11v16c0 13 8 20.5 17 23 9-2.5 17-10 17-23V11L26 6z" stroke="#ffffff" stroke-width="1.5" fill="none" opacity="0.9"/>
+    <!-- Book & Torch & Star -->
+    <polygon points="26,11 27.5,15 32,15 28.5,17.5 30,22 26,19 22,22 23.5,17.5 20,15 24.5,15" fill="#facc15"/>
+    <path d="M17 28c3-2 6-1 9 1 3-2 6-3 9-1v10c-3-2-6-1-9 1-3-2-6-3-9-1V28z" fill="#ffffff"/>
+    <path d="M26 29v10" stroke="#7a162b" stroke-width="1.5"/>
+    <circle cx="26" cy="44" r="2" fill="#facc15"/>
+  </g>
+  <!-- Text Content -->
+  <text x="64" y="26" font-family="'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="900" fill="#7a162b" letter-spacing="1.5px">IBA</text>
+  <text x="108" y="25" font-family="'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="800" fill="#0f172a" letter-spacing="-0.2px">Karachi</text>
+  <text x="64" y="41" font-family="'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10.5" font-weight="700" fill="#334155" letter-spacing="-0.1px">Institute of Business Administration</text>
+  <text x="64" y="54" font-family="'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" font-weight="600" fill="#64748b" letter-spacing="0.4px">Leadership and Ideas for Tomorrow</text>
+</svg>

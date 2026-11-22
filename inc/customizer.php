@@ -280,17 +280,28 @@ function factor_2_customize_register($wp_customize)
 	}
 
 	// ==============================================================
-	// CLIENT LOGOS
+	// CLIENT LOGOS (SLIDING STRIP)
 	// ==============================================================
+	$wp_customize->add_setting('f2_show_client_logos_strip', array(
+		'default' => false,
+		'sanitize_callback' => 'wp_validate_boolean',
+	));
+	$wp_customize->add_control('f2_show_client_logos_strip', array(
+		'label' => __('Show Client Logos Sliding Bar', 'appexeon3'),
+		'section' => 'factor_2_home_section',
+		'type' => 'checkbox',
+		'description' => __('Check to show the sliding logos bar between the Hero and Intro sections. Uncheck to hide it.', 'appexeon3'),
+	));
+
 	$wp_customize->add_setting('f2_client_logos', array(
-		'default' => "Enterprise Client A\nGovernment Dept B\nStartup Unicorn C\nGlobal Retailer D\nHealthcare Provider E\nLogistics Company F\nEducation Partner G\nTech Giant H",
+		'default' => "Sukkur IBA University\nIBA Karachi\nNIC Karachi",
 		'sanitize_callback' => 'sanitize_textarea_field',
 	));
 	$wp_customize->add_control('f2_client_logos', array(
-		'label' => __('Client / Partner Names', 'factor-2'),
+		'label' => __('Client / Partner Logos (Sliding Strip)', 'appexeon3'),
 		'section' => 'factor_2_home_section',
 		'type' => 'textarea',
-		'description' => __('One name per line. These appear in the "Our Clients & Partners" strip.', 'factor-2'),
+		'description' => __('One per line. Format: "Client Name" or "Client Name|Image URL". Built-in logos (Sukkur IBA University, IBA Karachi, NIC Karachi) automatically display their SVGs.', 'appexeon3'),
 	));
 
 	$wp_customize->add_setting('f2_clients_kicker', array(

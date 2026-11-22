@@ -2,7 +2,7 @@
 /**
  * Front page template.
  *
- * @package Factor_2
+ * @package Appexeon3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,9 +17,9 @@ get_header();
 <main id="main" class="site-main">
 	
 	<!-- Hero Banner Wrapper -->
-	<div class="hero-banner">
+	<div class="hero-banner hero-banner--split">
 		<!-- Hero Section -->
-		<section class="hero" id="top">
+		<section class="hero hero--split" id="top">
 			<div class="hero__copy">
 				<h1 class="hero__title">
 					<?php foreach ( $content['hero_lines'] as $line ) : ?>
@@ -28,7 +28,7 @@ get_header();
 				</h1>
 
 				<!-- Text Rotator - Swipe/Slide Style -->
-				<div class="hero__rotator" style="margin: 3rem 0 3.5rem; display: flex; justify-content: center; align-items: baseline; gap: 0.4em; opacity: 0.9;">
+				<div class="hero__rotator" style="margin: 3rem 0 3.5rem; opacity: 0.9; text-align: center;">
 					<span>EXPERTS AT BUILDING SCALABLE AND QUALITY SOLUTIONS THAT</span> 
 					<?php 
 					$rotating_phrases_raw = get_theme_mod('f2_rotating_phrases', 'CONVERT BETTER,EXCEED EXPECTATIONS,DELIGHT CUSTOMERS');
@@ -49,28 +49,170 @@ get_header();
 				<a class="button-link button-link--primary" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php echo esc_html( $content['hero_cta_text'] ); ?></a>
 				</div>
 			</div>
-		</section>
-
-		<!-- Intro/Audience Section -->
-		<section class="section" id="startups">
-			<div class="container">
-				<div class="section-heading text-center">
-					<p class="section-kicker" style="font-size: 1.05rem;"><?php echo esc_html( $content['intro_kicker'] ); ?></p>
-					<h2><?php echo esc_html( $content['intro_title'] ); ?></h2>
-					<p class="hero__lede" style="margin-top: 1rem; margin-bottom: 1.5rem;"><?php echo esc_html( $content['hero_copy'] ); ?></p>
-					<p><?php echo esc_html( $content['intro_copy'] ); ?></p>
+				<!-- Hero image tiles: add mockup-1.png, mockup-2.png, mockup-4.png in assets/images/hero/ -->
+				<?php $hero_img = get_template_directory_uri() . '/assets/images/hero/'; ?>
+				<div class="hero__media">
+					<div class="hero__col">
+						<figure class="hero__tile hero__tile--blue"></figure>
+						<figure class="hero__tile hero__tile--orange">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-3.png' ); ?>" alt="<?php esc_attr_e( 'Retail dashboard on a laptop', 'factor-2' ); ?>" width="831" height="564" decoding="async">
+						</figure>
+					</div>
+					<div class="hero__col hero__col--offset">
+						<figure class="hero__tile hero__tile--purple"></figure>
+						<figure class="hero__tile hero__tile--red"></figure>
+					</div>
 				</div>
-				
-				<div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-					<?php foreach ( $content['audiences'] as $audience ) : ?>
-						<a class="button-link button-link--ghost" href="<?php echo esc_url( $audience['url'] ); ?>" target="_blank" rel="noreferrer noopener">
-							<?php echo esc_html( $audience['label'] ); ?>
-						</a>
+		</section>
+	</div>
+
+	<!-- Value Strip -->
+	<section class="home-value-strip" aria-label="Why work with Appexeon">
+		<div class="container home-value-strip__inner">
+			<div class="home-value-strip__item">
+				<span class="home-value-strip__number">01</span>
+				<div>
+					<h2>Strategy-led</h2>
+					<p>Every build starts with a clear business goal.</p>
+				</div>
+			</div>
+			<div class="home-value-strip__item">
+				<span class="home-value-strip__number">02</span>
+				<div>
+					<h2>Built to scale</h2>
+					<p>Reliable foundations that grow with your team.</p>
+				</div>
+			</div>
+			<div class="home-value-strip__item">
+				<span class="home-value-strip__number">03</span>
+				<div>
+					<h2>Human support</h2>
+					<p>Practical guidance from first idea to next release.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Sliding Client Logos Strip ("Sliding Patti") with White Background & Spacing -->
+	<?php
+	$default_svg_map = array(
+		'sukkur'       => 'logo-iba-sukkur.svg',
+		'iba sukkur'   => 'logo-iba-sukkur.svg',
+		'sibau'        => 'logo-iba-sukkur.svg',
+		'karachi'      => 'logo-iba-karachi.svg',
+		'iba karachi'  => 'logo-iba-karachi.svg',
+		'iba'          => 'logo-iba-karachi.svg',
+		'nic'          => 'logo-nic-karachi.svg',
+		'nic karachi'  => 'logo-nic-karachi.svg',
+		'incubation'   => 'logo-nic-karachi.svg',
+	);
+
+	$slider_items = array();
+	$logos_source = ! empty( $content['client_logos'] ) ? $content['client_logos'] : array(
+		array('name' => 'Sukkur IBA University', 'image' => 'logo-iba-sukkur.svg'),
+		array('name' => 'IBA Karachi', 'image' => 'logo-iba-karachi.svg'),
+		array('name' => 'NIC Karachi', 'image' => 'logo-nic-karachi.svg'),
+	);
+
+	foreach ( $logos_source as $item ) {
+		$name  = trim( isset( $item['name'] ) ? $item['name'] : ( is_string( $item ) ? $item : '' ) );
+		$image = trim( isset( $item['image'] ) ? $item['image'] : '' );
+		$img_src = '';
+
+		if ( ! empty( $image ) ) {
+			if ( preg_match( '#^(https?:)?//#i', $image ) || strpos( $image, '/' ) === 0 ) {
+				$img_src = $image;
+			} else {
+				$img_src = get_template_directory_uri() . '/assets/images/clients/' . $image;
+			}
+		} else {
+			$lower = strtolower( $name );
+			// Check specific multi-word keys first
+			if ( strpos( $lower, 'sukkur' ) !== false ) {
+				$img_src = get_template_directory_uri() . '/assets/images/clients/logo-iba-sukkur.svg';
+			} elseif ( strpos( $lower, 'nic' ) !== false ) {
+				$img_src = get_template_directory_uri() . '/assets/images/clients/logo-nic-karachi.svg';
+			} elseif ( strpos( $lower, 'iba' ) !== false || strpos( $lower, 'karachi' ) !== false ) {
+				$img_src = get_template_directory_uri() . '/assets/images/clients/logo-iba-karachi.svg';
+			} else {
+				foreach ( $default_svg_map as $key => $file ) {
+					if ( strpos( $lower, $key ) !== false ) {
+						$img_src = get_template_directory_uri() . '/assets/images/clients/' . $file;
+						break;
+					}
+				}
+			}
+		}
+
+		if ( ! empty( $name ) || ! empty( $img_src ) ) {
+			$slider_items[] = array(
+				'name'    => $name,
+				'img_src' => $img_src,
+			);
+		}
+	}
+
+	// Repeat items to fill space and guarantee rich infinite loop
+	if ( ! empty( $slider_items ) && count( $slider_items ) < 9 ) {
+		$repeated = array();
+		while ( count( $repeated ) < 9 ) {
+			foreach ( $slider_items as $s_item ) {
+				$repeated[] = $s_item;
+				if ( count( $repeated ) >= 9 ) {
+					break;
+				}
+			}
+		}
+		$slider_items = $repeated;
+	}
+	?>
+	<?php if ( ! empty( $content['show_client_logos'] ) && ! empty( $slider_items ) ) : ?>
+	<section class="logo-sliding-strip" aria-label="<?php esc_attr_e( 'Clients and Partners', 'appexeon3' ); ?>">
+		<div class="logo-sliding-strip__marquee">
+			<div class="logo-sliding-strip__track">
+				<div class="logo-sliding-strip__group">
+					<?php foreach ( $slider_items as $client ) : ?>
+						<div class="logo-sliding-badge" title="<?php echo esc_attr( $client['name'] ); ?>">
+							<?php if ( ! empty( $client['img_src'] ) ) : ?>
+								<img src="<?php echo esc_url( $client['img_src'] ); ?>" alt="<?php echo esc_attr( $client['name'] ); ?>" loading="lazy">
+							<?php else : ?>
+								<span class="logo-sliding-badge__text"><?php echo esc_html( $client['name'] ); ?></span>
+							<?php endif; ?>
+						</div>
+					<?php endforeach; ?>
+				</div>
+				<!-- Duplicate set for seamless infinite scroll -->
+				<div class="logo-sliding-strip__group" aria-hidden="true">
+					<?php foreach ( $slider_items as $client ) : ?>
+						<div class="logo-sliding-badge" title="<?php echo esc_attr( $client['name'] ); ?>">
+							<?php if ( ! empty( $client['img_src'] ) ) : ?>
+								<img src="<?php echo esc_url( $client['img_src'] ); ?>" alt="<?php echo esc_attr( $client['name'] ); ?>" loading="lazy">
+							<?php else : ?>
+								<span class="logo-sliding-badge__text"><?php echo esc_html( $client['name'] ); ?></span>
+							<?php endif; ?>
+						</div>
 					<?php endforeach; ?>
 				</div>
 			</div>
-		</section>
-	</div>
+		</div>
+	</section>
+	<?php endif; ?>
+
+	<!-- Intro/Audience Section -->
+	<section class="section section--intro" id="startups">
+		<div class="container">
+			<div class="section-heading text-center intro-statement">
+				<p class="intro-statement__copy">
+					Appexeon builds scalable <strong>apps, websites, and custom software</strong>, including <strong>ERP, POS, and AI solutions</strong> for businesses and startups.
+				</p>
+			</div>
+			
+			<div class="intro-statement__actions">
+				<a class="button-link intro-statement__button" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">I am a Business</a>
+				<a class="button-link intro-statement__button" href="<?php echo esc_url( home_url( '/startup/' ) ); ?>">I have a Startup idea</a>
+			</div>
+		</div>
+	</section>
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
@@ -80,11 +222,12 @@ get_header();
 			const items = rotator.querySelectorAll('.text-rotator__item');
 			const count = items.length - 1; // Number of unique phrases
 			let index = 0;
+			const itemHeight = items[0] ? items[0].getBoundingClientRect().height : 0;
 
 			function rotate() {
 				index++;
 				rotator.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-				rotator.style.transform = `translateY(-${index * 1.4}em)`;
+				rotator.style.transform = `translateY(-${index * itemHeight}px)`;
 
 				if (index === count) {
 					setTimeout(() => {
@@ -103,7 +246,7 @@ get_header();
 
 		<?php if ( ! empty( $content['services'] ) ) : ?>
 		<!-- Services Section -->
-		<section class="section bg-secondary" id="services">
+		<section class="section bg-secondary home-services-section" id="services">
 			<div class="container">
 				<div class="section-heading">
 					<p class="section-kicker"><?php echo esc_html( $content['services_kicker'] ); ?></p>
@@ -119,7 +262,7 @@ get_header();
 								<h3><?php echo esc_html( $service['title'] ); ?></h3>
 								<p><?php echo esc_html( $service['copy'] ); ?></p>
 								<span class="service-card__link">
-									<?php echo esc_html( $content['services_btn_text'] ); ?> →
+									<?php echo esc_html( $content['services_btn_text'] ); ?> â†’
 								</span>
 							</article>
 						</a>
@@ -181,19 +324,6 @@ get_header();
 							<h3><?php echo esc_html( $reason['title'] ); ?></h3>
 							<p><?php echo esc_html( $reason['copy'] ); ?></p>
 						</article>
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</section>
-		<?php endif; ?>
-
-		<?php if ( ! empty( $content['client_logos'] ) ) : ?>
-		<section class="section" style="padding: 2rem 0;">
-			<div class="container">
-				<p class="section-kicker text-center" style="display: block;"><?php echo esc_html( $content['clients_kicker'] ); ?></p>
-				<div class="logo-wall">
-					<?php foreach ( $content['client_logos'] as $logo ) : ?>
-						<div style="font-weight: 800; font-size: 1.25rem; color: var(--text-secondary);"><?php echo esc_html( $logo ); ?></div>
 					<?php endforeach; ?>
 				</div>
 			</div>

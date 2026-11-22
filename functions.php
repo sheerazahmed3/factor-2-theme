@@ -2,7 +2,7 @@
 /**
  * Theme setup, assets, and homepage helpers.
  *
- * @package Factor_2
+ * @package Appexeon3
  */
 
 if (!defined('ABSPATH')) {
@@ -41,7 +41,7 @@ function factor_2_setup()
 
 	register_nav_menus(
 		array(
-		'primary' => __('Primary Menu', 'factor-2'),
+		'primary' => __('Primary Menu', 'appexeon3'),
 	)
 	);
 }
@@ -54,6 +54,7 @@ add_action('after_setup_theme', 'factor_2_setup');
 function factor_2_create_essential_pages()
 {
 	$pages_to_create = array(
+			array('title' => 'Home', 'template' => 'default'),
 			array('title' => 'Contact', 'template' => 'page-contact.php'),
 			array('title' => 'Startup', 'template' => 'page-startup.php'),
 			array('title' => 'AI Development', 'template' => 'page-ai-development.php'),
@@ -118,28 +119,76 @@ function factor_2_create_essential_pages()
 add_action('init', 'factor_2_create_essential_pages');
 
 /**
+ * Self-Repair: Automatically configure the static homepage and reset the template.
+ * This ensures the custom front-page design loads instead of fallback/contact templates.
+ */
+function factor_2_auto_setup_homepage()
+{
+	// 1. Attempt to find a page to use as the homepage.
+	// Look for 'Home' or 'Homepage' titles first.
+	$target_page = get_page_by_title('Home');
+	if (!$target_page) {
+		$target_page = get_page_by_title('Homepage');
+	}
+
+	// 2. If 'Home' isn't found, try finding any page with "Home" in the title.
+	if (!$target_page) {
+		$all_pages = get_pages(array(
+			'number' => 20,
+			'sort_column' => 'ID',
+			'sort_order' => 'ASC',
+			'post_status' => 'publish',
+		));
+		foreach ($all_pages as $p) {
+			if (stripos($p->post_title, 'Home') !== false) {
+				$target_page = $p;
+				break;
+			}
+		}
+	}
+
+	// 3. Configure the Reading Settings if a target page was found.
+	if ($target_page && is_object($target_page)) {
+		update_option('show_on_front', 'page');
+		update_option('page_on_front', $target_page->ID);
+
+		// 4. IMPORTANT: Reset the page template to 'default'.
+		// This forces WordPress to use the theme's front-page.php logic.
+		update_post_meta($target_page->ID, '_wp_page_template', 'default');
+	}
+
+	// 5. FORCE CACHE PURGE (For Hostinger/LiteSpeed)
+	if (defined('LSCWP_VERSION')) {
+		do_action('litespeed_purge_all');
+	}
+}
+// Using a higher priority (20) to ensure it runs after page creation logic.
+add_action('init', 'factor_2_auto_setup_homepage', 20);
+
+/**
  * Enqueue fonts, stylesheet, and navigation script.
  */
 function factor_2_enqueue_assets()
 {
 	$theme_version = wp_get_theme()->get('Version');
+	$css_version   = file_exists(get_stylesheet_directory() . '/style.css') ? filemtime(get_stylesheet_directory() . '/style.css') : $theme_version;
 
 	wp_enqueue_style(
-		'factor-2-fonts',
+		'appexeon3-fonts',
 		'https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans:wght@600;900&display=swap',
 		array(),
 		null
 	);
 
 	wp_enqueue_style(
-		'factor-2-style',
+		'appexeon3-style',
 		get_stylesheet_uri(),
-		array('factor-2-fonts'),
-		$theme_version
+		array('appexeon3-fonts'),
+		$css_version
 	);
 
 	wp_enqueue_script(
-		'factor-2-script',
+		'appexeon3-script',
 		get_template_directory_uri() . '/assets/js/main.js',
 		array(),
 		$theme_version,
@@ -184,35 +233,35 @@ function factor_2_get_primary_nav_items()
 {
 	return array(
 			array(
-			'label' => __('Services', 'factor-2'),
+			'label' => __('Services', 'appexeon3'),
 			'url' => '#',
 			'children' => array(
-					array('label' => __('App Development', 'factor-2'), 'url' => site_url('/app-development/')),
-					array('label' => __('Web Development', 'factor-2'), 'url' => site_url('/web-development/')),
-					array('label' => __('AI Development', 'factor-2'), 'url' => site_url('/ai-development/')),
-					array('label' => __('Consulting & Strategy', 'factor-2'), 'url' => site_url('/consulting-strategy/')),
-					array('label' => __('Startup', 'factor-2'), 'url' => site_url('/startup/')),
-					array('label' => __('Tech Staff Outsourcing', 'factor-2'), 'url' => site_url('/tech-staff-outsourcing/')),
+					array('label' => __('App Development', 'appexeon3'), 'url' => site_url('/app-development/')),
+					array('label' => __('Web Development', 'appexeon3'), 'url' => site_url('/web-development/')),
+					array('label' => __('AI Development', 'appexeon3'), 'url' => site_url('/ai-development/')),
+					array('label' => __('Consulting & Strategy', 'appexeon3'), 'url' => site_url('/consulting-strategy/')),
+					array('label' => __('Startup', 'appexeon3'), 'url' => site_url('/startup/')),
+					array('label' => __('Tech Staff Outsourcing', 'appexeon3'), 'url' => site_url('/tech-staff-outsourcing/')),
 			),
 		),
 			array(
-			'label' => __('Startups', 'factor-2'),
+			'label' => __('Startups', 'appexeon3'),
 			'url' => site_url('/startup/'),
 		),
 			array(
-			'label' => __('Portfolio', 'factor-2'),
+			'label' => __('Portfolio', 'appexeon3'),
 			'url' => site_url('/portfolio/'),
 		),
 			array(
-			'label' => __('About', 'factor-2'),
+			'label' => __('About', 'appexeon3'),
 			'url' => home_url('/#about'),
 		),
 			array(
-			'label' => __('Blog', 'factor-2'),
+			'label' => __('Blog', 'appexeon3'),
 			'url' => home_url('/#blog'),
 		),
 			array(
-			'label' => __('Contact', 'factor-2'),
+			'label' => __('Contact', 'appexeon3'),
 			'url' => site_url('/contact/'),
 			'is_cta' => true,
 		),
@@ -268,7 +317,8 @@ function factor_2_get_homepage_content()
 	}
 
 	// --- Client logos from Customizer ---
-	$client_logos = factor_2_parse_lines(get_theme_mod('f2_client_logos', "Enterprise Client A\nGovernment Dept B\nStartup Unicorn C\nGlobal Retailer D"));
+	$client_logos_raw = get_theme_mod('f2_client_logos', "Sukkur IBA University\nIBA Karachi\nNIC Karachi");
+	$client_logos = factor_2_parse_pipe_textarea($client_logos_raw, array('name', 'image'));
 
 	// --- Footer: Offices, Social, Quick Links ---
 	$offices = factor_2_parse_lines(get_theme_mod('f2_footer_offices', "App Studio Melbourne\nApp Studio Sydney"));
@@ -316,6 +366,7 @@ function factor_2_get_homepage_content()
 		'testimonials' => $testimonials,
 		'reasons_kicker' => get_theme_mod('f2_reasons_kicker', 'Why Choose Us'),
 		'reasons_heading' => get_theme_mod('f2_reasons_heading', 'A framework for reliable delivery.'),
+		'show_client_logos' => (bool) get_theme_mod('f2_show_client_logos_strip', false),
 		'client_logos' => $client_logos,
 		'clients_kicker' => get_theme_mod('f2_clients_kicker', 'Our Clients & Partners'),
 		'reasons' => $reasons,
@@ -344,24 +395,24 @@ function factor_2_get_insight_cards($count = 3)
 	if (empty($posts)) {
 		return array(
 				array(
-				'eyebrow' => __('Playbook', 'factor-2'),
-				'title' => __('How to scope a digital product without inflating the first release.', 'factor-2'),
-				'excerpt' => __('A clear framework for splitting must-have functionality from expensive assumptions before delivery starts.', 'factor-2'),
-				'date' => __('Placeholder article', 'factor-2'),
+				'eyebrow' => __('Playbook', 'appexeon3'),
+				'title' => __('How to scope a digital product without inflating the first release.', 'appexeon3'),
+				'excerpt' => __('A clear framework for splitting must-have functionality from expensive assumptions before delivery starts.', 'appexeon3'),
+				'date' => __('Placeholder article', 'appexeon3'),
 				'url' => 'https://example.com',
 			),
 				array(
-				'eyebrow' => __('Guide', 'factor-2'),
-				'title' => __('What founders should prepare before bringing in a senior product squad.', 'factor-2'),
-				'excerpt' => __('From business goals to technical unknowns, the quality of your starting context shapes the speed of the next quarter.', 'factor-2'),
-				'date' => __('Placeholder article', 'factor-2'),
+				'eyebrow' => __('Guide', 'appexeon3'),
+				'title' => __('What founders should prepare before bringing in a senior product squad.', 'appexeon3'),
+				'excerpt' => __('From business goals to technical unknowns, the quality of your starting context shapes the speed of the next quarter.', 'appexeon3'),
+				'date' => __('Placeholder article', 'appexeon3'),
 				'url' => 'https://example.com',
 			),
 				array(
-				'eyebrow' => __('Notes', 'factor-2'),
-				'title' => __('The difference between a polished interface and a genuinely reliable product system.', 'factor-2'),
-				'excerpt' => __('Good product work joins design decisions, operational realities, and engineering resilience instead of treating them separately.', 'factor-2'),
-				'date' => __('Placeholder article', 'factor-2'),
+				'eyebrow' => __('Notes', 'appexeon3'),
+				'title' => __('The difference between a polished interface and a genuinely reliable product system.', 'appexeon3'),
+				'excerpt' => __('Good product work joins design decisions, operational realities, and engineering resilience instead of treating them separately.', 'appexeon3'),
+				'date' => __('Placeholder article', 'appexeon3'),
 				'url' => 'https://example.com',
 			),
 		);
@@ -372,7 +423,7 @@ function factor_2_get_insight_cards($count = 3)
 	foreach ($posts as $post) {
 		$post_id = $post->ID;
 		$terms = get_the_terms($post_id, 'category');
-		$term_label = __('Article', 'factor-2');
+		$term_label = __('Article', 'appexeon3');
 		$excerpt = has_excerpt($post_id) ? get_the_excerpt($post_id) : wp_trim_words(wp_strip_all_tags(get_post_field('post_content', $post_id)), 24, '...');
 
 		if (!empty($terms) && !is_wp_error($terms)) {

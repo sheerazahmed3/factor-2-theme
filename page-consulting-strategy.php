@@ -34,13 +34,13 @@ $content = factor_2_get_consulting_content();
 					<span style="text-align: center; max-width: 1000px; font-size: 1.25rem; font-weight: 500; letter-spacing: 0.03em; line-height: 1.5; <?php echo ! empty( $content['hero_video'] ) ? 'color: #fff; opacity: 1;' : 'color: #222;'; ?>"><?php echo esc_html( $content['hero_desc'] ); ?></span> 					<?php 
 					$phrases = array_map('trim', explode(',', $content['rotating_phrases']));
 					?>
-					<span class="text-rotator" id="service-rotator" style="display: block; overflow: hidden; height: 1.5em; font-size: 1.25rem; font-weight: 600; text-align: center;">
+					<span class="text-rotator" id="service-rotator" style="display: block; overflow: hidden; height: 1.4em; font-size: 1.25rem; font-weight: 600; text-align: center;">
 						<span class="text-rotator__list" style="display: flex; flex-direction: column; align-items: center;">
 							<?php foreach ($phrases as $phrase): ?>
-								<span class="text-rotator__item" style="text-align: center; display: flex; align-items: center; justify-content: center; height: 1.5em; line-height: 1.5em; width: 100%;"><?php echo esc_html($phrase); ?></span>
+								<span class="text-rotator__item" style="text-align: center; display: flex; align-items: center; justify-content: center; height: 1.4em; line-height: 1.4em; width: 100%; flex-shrink: 0;"><?php echo esc_html($phrase); ?></span>
 							<?php endforeach; ?>
 							<!-- Duplicate first item for infinite loop -->
-							<span class="text-rotator__item" style="text-align: center; display: flex; align-items: center; justify-content: center; height: 1.5em; line-height: 1.5em; width: 100%;"><?php echo esc_html($phrases[0]); ?></span>
+							<span class="text-rotator__item" style="text-align: center; display: flex; align-items: center; justify-content: center; height: 1.4em; line-height: 1.4em; width: 100%; flex-shrink: 0;"><?php echo esc_html($phrases[0]); ?></span>
 						</span>
 					</span>
 				</div>
@@ -51,6 +51,59 @@ $content = factor_2_get_consulting_content();
 			</div>
 		</section>
 	</div>
+
+	<!-- Consulting Focus -->
+	<section class="section bg-secondary" style="padding-top: 5rem; padding-bottom: 5rem;">
+		<div class="container">
+			<div class="section-heading">
+				<p class="section-kicker">Where We Can Help</p>
+				<h2>Clear direction for your next stage of growth</h2>
+				<p style="max-width: 700px;">We turn complex business and technology questions into practical priorities, decisions, and actions your team can move on with confidence.</p>
+			</div>
+
+			<div class="service-grid">
+				<?php foreach ( $content['capabilities'] as $capability ) : ?>
+					<article class="service-card">
+						<p class="section-kicker">Consulting &amp; Strategy</p>
+						<h3><?php echo esc_html( $capability['title'] ); ?></h3>
+						<p><?php echo esc_html( $capability['desc'] ); ?></p>
+					</article>
+				<?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+
+	<!-- Engagement Process -->
+	<section class="section" style="padding-top: 5rem; padding-bottom: 5rem;">
+		<div class="container">
+			<div class="section-heading">
+				<p class="section-kicker">Our Approach</p>
+				<h2>From first conversation to measurable progress</h2>
+				<p style="max-width: 700px;">A focused process that keeps strategy grounded in your goals, your people, and the realities of execution.</p>
+			</div>
+
+			<div class="process-steps-list">
+				<?php foreach ( $content['steps'] as $index => $step ) : ?>
+					<div class="step-box">
+						<div class="step-box__number"><?php echo esc_html( sprintf( '%02d', $index + 1 ) ); ?></div>
+						<div class="step-box__content">
+							<h3><?php echo esc_html( $step['title'] ); ?></h3>
+							<p><?php echo esc_html( $step['desc'] ); ?></p>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
+
+			<div class="consult-banner" style="margin-top: 4rem;">
+				<p class="section-kicker">Ready When You Are</p>
+				<h2>Let’s make the next decision easier.</h2>
+				<p>Bring us the challenge, the opportunity, or the idea you are weighing. We’ll help you find the clearest path forward.</p>
+				<div class="consult-banner__actions">
+					<a class="button-link button-link--consult" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>">Start a conversation</a>
+				</div>
+			</div>
+		</div>
+	</section>
 </main>
 
 <script>
@@ -61,11 +114,12 @@ $content = factor_2_get_consulting_content();
 		const items = rotator.querySelectorAll('.text-rotator__item');
 		const count = items.length - 1; 
 		let index = 0;
+		const itemHeight = items[0] ? items[0].getBoundingClientRect().height : 0;
 
 		function rotate() {
 			index++;
 			rotator.style.transition = 'transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-			rotator.style.transform = `translateY(-${index * 1.4}em)`;
+			rotator.style.transform = `translateY(-${index * itemHeight}px)`;
 
 			if (index === count) {
 				setTimeout(() => {

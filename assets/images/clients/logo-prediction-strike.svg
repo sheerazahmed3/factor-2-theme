@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" fill="none" height="38">
+  <!-- Shield Icon with Bolt -->
+  <g transform="translate(6, 10)">
+    <path d="M16 2L4 7v11c0 8 5 15 12 18 7-3 12-10 12-18V7L16 2z" stroke="#2d3748" stroke-width="3" fill="none"/>
+    <path d="M17 9l-5 8h4l-2 8 7-10h-4l3-6h-3z" fill="#2d3748"/>
+  </g>
+  <text x="44" y="37" font-family="'Manrope', -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="900" fill="#1a202c" letter-spacing="1.5px">PREDICTIONSTRIKE</text>
+</svg>
