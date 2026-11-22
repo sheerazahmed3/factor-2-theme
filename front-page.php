@@ -264,11 +264,12 @@ get_header();
 					<?php foreach ( $content['services'] as $service ) : ?>
 						<a href="<?php echo esc_url( $service['url'] ); ?>" class="service-card animate-on-scroll" target="_blank" rel="noreferrer noopener">
 							<article>
-								<p class="section-kicker"><?php echo esc_html( $service['eyebrow'] ); ?></p>
+								<?php echo factor_2_service_icon( $service['eyebrow'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<p class="section-kicker"><?php echo esc_html( $service['eyebrow'] ); ?></p>
 								<h3><?php echo esc_html( $service['title'] ); ?></h3>
 								<p><?php echo esc_html( $service['copy'] ); ?></p>
 								<span class="service-card__link">
-									<?php echo esc_html( $content['services_btn_text'] ); ?> â†’
+									<?php echo esc_html( $content['services_btn_text'] ); ?> →
 								</span>
 							</article>
 						</a>

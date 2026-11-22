@@ -2282,3 +2282,85 @@ body.nav-is-open .site-header {
     animation: none;
   }
 }
+
+
+/* ==========================================================================
+   Homepage service cards: more compact, with icons
+   ========================================================================== */
+.home-services-section .service-grid {
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.25rem;
+}
+
+.home-services-section .service-card {
+  grid-column: span 2;
+  padding: 1.75rem 1.5rem;
+  border-radius: 16px;
+}
+
+/* Centre an incomplete last row (2 cards or 1 card) */
+.home-services-section .service-card:nth-child(3n+1):nth-last-child(2) { grid-column: 2 / span 2; }
+.home-services-section .service-card:nth-child(3n+1):last-child        { grid-column: 3 / span 2; }
+
+.home-services-section .service-card__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  background: rgba(145, 199, 61, 0.2);
+  color: #5d8a1f;
+  transition: background-color 0.4s ease, color 0.4s ease, transform 0.4s ease;
+}
+
+.home-services-section .service-card:hover .service-card__icon {
+  background: var(--accent-primary);
+  color: #ffffff;
+  transform: scale(1.06);
+}
+
+.home-services-section .service-card .section-kicker {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+.home-services-section .service-card h3 {
+  margin-bottom: 0.7rem;
+  font-size: 1.25rem;
+  line-height: 1.25;
+}
+
+.home-services-section .service-card p {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  margin-bottom: 1rem;
+}
+
+.home-services-section .service-card .service-card__link {
+  font-size: 0.9rem;
+}
+
+.home-services-section .service-card:hover {
+  transform: translateY(-4px);
+}
+
+@media (max-width: 991px) {
+  .home-services-section .service-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .home-services-section .service-card,
+  .home-services-section .service-card:nth-child(3n+1):nth-last-child(2),
+  .home-services-section .service-card:nth-child(3n+1):last-child {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-services-section .service-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}

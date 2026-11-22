@@ -960,3 +960,47 @@ function factor_2_menu_item_dropdown_arrow($title, $item, $args, $depth)
 	return $title;
 }
 add_filter('nav_menu_item_title', 'factor_2_menu_item_dropdown_arrow', 10, 4);
+
+/**
+ * Small line icon for the homepage service cards, chosen from the card label.
+ *
+ * @param string $label Service eyebrow/label text.
+ * @return string Safe, static SVG markup.
+ */
+function factor_2_service_icon( $label ) {
+	$l = strtolower( (string) $label );
+
+	$icons = array(
+		'mvp'      => '<path d="M12 2c3 2 5 5 5 9l-2 3H9l-2-3c0-4 2-7 5-9z"/><circle cx="12" cy="9" r="1.5"/><path d="M9 14l-2 4 3-1M15 14l2 4-3-1"/>',
+		'ai'       => '<rect x="6" y="6" width="12" height="12" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/>',
+		'staff'    => '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c2.8 0 5 1.8 5 5"/>',
+		'consult'  => '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>',
+		'design'   => '<path d="M12 20h9"/><path d="M16.5 3.5l4 4L8 20l-5 1 1-5z"/>',
+		'web'      => '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/>',
+		'app'      => '<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
+		'support'  => '<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><rect x="3" y="14" width="4" height="6" rx="1"/><rect x="17" y="14" width="4" height="6" rx="1"/>',
+		'default'  => '<path d="M12 3L2 8l10 5 10-5-10-5z"/><path d="M2 13l10 5 10-5"/>',
+	);
+
+	if ( false !== strpos( $l, 'mvp' ) ) {
+		$key = 'mvp';
+	} elseif ( false !== strpos( $l, 'artificial' ) || preg_match( '/\bai\b/', $l ) ) {
+		$key = 'ai';
+	} elseif ( false !== strpos( $l, 'staff' ) ) {
+		$key = 'staff';
+	} elseif ( false !== strpos( $l, 'consult' ) ) {
+		$key = 'consult';
+	} elseif ( false !== strpos( $l, 'design' ) ) {
+		$key = 'design';
+	} elseif ( false !== strpos( $l, 'web' ) ) {
+		$key = 'web';
+	} elseif ( false !== strpos( $l, 'app' ) ) {
+		$key = 'app';
+	} elseif ( false !== strpos( $l, 'support' ) || false !== strpos( $l, 'maintenance' ) ) {
+		$key = 'support';
+	} else {
+		$key = 'default';
+	}
+
+	return '<span class="service-card__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $icons[ $key ] . '</svg></span>';
+}
