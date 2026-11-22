@@ -62,7 +62,6 @@ function factor_2_create_essential_pages()
 			array('title' => 'Tech Staff Outsourcing', 'template' => 'page-tech-staff-outsourcing.php'),
 			array('title' => 'App Development', 'template' => 'page-app-development.php'),
 			array('title' => 'Web Development', 'template' => 'page-web-development.php'),
-			array('title' => 'Testing', 'template' => 'page-testing.php'),
 			array('title' => 'Portfolio', 'template' => 'page-portfolio.php'),
 	);
 
@@ -229,7 +228,7 @@ function factor_2_parse_lines($raw)
  *
  * @return array
  */
-function factor_2_get_primary_nav_items()
+function factor_2_get_primary_nav_items_raw()
 {
 	return array(
 			array(
@@ -254,11 +253,11 @@ function factor_2_get_primary_nav_items()
 		),
 			array(
 			'label' => __('About', 'appexeon3'),
-			'url' => home_url('/#about'),
+			'url' => factor_2_about_url(),
 		),
 			array(
 			'label' => __('Blog', 'appexeon3'),
-			'url' => home_url('/#blog'),
+			'url' => factor_2_blog_url(),
 		),
 			array(
 			'label' => __('Contact', 'appexeon3'),
@@ -1003,4 +1002,141 @@ function factor_2_service_icon( $label ) {
 	}
 
 	return '<span class="service-card__icon" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' . $icons[ $key ] . '</svg></span>';
+}
+
+/**
+ * Basic SEO: homepage title, meta description, social share tags and a fallback favicon.
+ * Skipped automatically when a dedicated SEO plugin is active.
+ */
+function factor_2_has_seo_plugin() {
+	return defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' ) || defined( 'AIOSEO_VERSION' ) || defined( 'SEOPRESS_VERSION' );
+}
+
+function factor_2_front_page_title( $parts ) {
+	if ( is_front_page() && ! factor_2_has_seo_plugin() ) {
+		$parts['title'] = get_bloginfo( 'name' ) . ' | ' . __( 'Software Development for Businesses & Startups', 'appexeon3' );
+		unset( $parts['tagline'] );
+	}
+	return $parts;
+}
+add_filter( 'document_title_parts', 'factor_2_front_page_title' );
+
+function factor_2_meta_description() {
+	$default = get_theme_mod( 'f2_seo_description', 'Appexeon builds scalable apps, websites, and custom software, including ERP, POS, and AI solutions for businesses and startups.' );
+
+	if ( is_singular() && ! is_front_page() ) {
+		$post_id = get_queried_object_id();
+		$text    = has_excerpt( $post_id ) ? get_the_excerpt( $post_id ) : wp_strip_all_tags( strip_shortcodes( (string) get_post_field( 'post_content', $post_id ) ) );
+		$text    = trim( preg_replace( '/\s+/', ' ', $text ) );
+		if ( strlen( $text ) >= 50 ) {
+			return wp_html_excerpt( $text, 157, '...' );
+		}
+		$text = get_the_title( $post_id ) . ' - ' . $default;
+		return wp_html_excerpt( $text, 157, '...' );
+	}
+
+	return wp_html_excerpt( $default, 157, '...' );
+}
+
+function factor_2_seo_head() {
+	if ( is_admin() || is_404() ) {
+		return;
+	}
+
+	if ( ! factor_2_has_seo_plugin() ) {
+		$description = factor_2_meta_description();
+		$title       = wp_get_document_title();
+		$url         = is_singular() ? get_permalink() : home_url( '/' );
+		$image       = '';
+
+		if ( has_custom_logo() ) {
+			$image = wp_get_attachment_image_url( get_theme_mod( 'custom_logo' ), 'full' );
+		}
+
+		echo '<meta name="description" content="' . esc_attr( $description ) . '">' . "\n";
+		echo '<meta property="og:type" content="' . ( is_front_page() ? 'website' : 'article' ) . '">' . "\n";
+		echo '<meta property="og:site_name" content="' . esc_attr( get_bloginfo( 'name' ) ) . '">' . "\n";
+		echo '<meta property="og:title" content="' . esc_attr( $title ) . '">' . "\n";
+		echo '<meta property="og:description" content="' . esc_attr( $description ) . '">' . "\n";
+		echo '<meta property="og:url" content="' . esc_url( $url ) . '">' . "\n";
+		if ( $image ) {
+			echo '<meta property="og:image" content="' . esc_url( $image ) . '">' . "\n";
+		}
+		echo '<meta name="twitter:card" content="' . ( $image ? 'summary_large_image' : 'summary' ) . '">' . "\n";
+		echo '<meta name="twitter:title" content="' . esc_attr( $title ) . '">' . "\n";
+		echo '<meta name="twitter:description" content="' . esc_attr( $description ) . '">' . "\n";
+	}
+
+	// Fallback favicon when no Site Icon is set (Appearance > Customize > Site Identity).
+	if ( ! has_site_icon() ) {
+		echo '<link rel="icon" type="image/svg+xml" href="' . esc_url( get_template_directory_uri() . '/assets/images/favicon.svg' ) . '">' . "\n";
+	}
+}
+add_action( 'wp_head', 'factor_2_seo_head', 5 );
+
+/**
+ * Primary navigation items. Items without a working destination (empty URL) are left out,
+ * so visitors never see a dead link.
+ *
+ * @return array
+ */
+function factor_2_get_primary_nav_items() {
+	$items = array();
+	foreach ( factor_2_get_primary_nav_items_raw() as $item ) {
+		if ( empty( $item['url'] ) ) {
+			continue;
+		}
+		$items[] = $item;
+	}
+	return $items;
+}
+
+/**
+ * About link: a real "About" page if one exists, otherwise the About anchor on the homepage.
+ */
+function factor_2_about_url() {
+	$page = get_page_by_path( 'about' );
+	if ( $page && 'publish' === $page->post_status ) {
+		return get_permalink( $page );
+	}
+	return home_url( '/#about' );
+}
+
+/**
+ * Blog link: only when a posts page is set (Settings > Reading), otherwise empty so it is hidden.
+ */
+function factor_2_blog_url() {
+	$posts_page = (int) get_option( 'page_for_posts' );
+	if ( $posts_page && 'publish' === get_post_status( $posts_page ) ) {
+		return get_permalink( $posts_page );
+	}
+	return '';
+}
+
+/**
+ * Footer quick links: send each label to the closest real page.
+ *
+ * @param string $label Link label.
+ * @return string URL.
+ */
+function factor_2_quick_link_url( $label ) {
+	$l = strtolower( (string) $label );
+
+	if ( false !== strpos( $l, 'startup' ) ) {
+		$path = '/startup/';
+	} elseif ( false !== strpos( $l, 'web' ) ) {
+		$path = '/web-development/';
+	} elseif ( false !== strpos( $l, 'staff' ) ) {
+		$path = '/tech-staff-outsourcing/';
+	} elseif ( preg_match( '/\bai\b/', $l ) ) {
+		$path = '/ai-development/';
+	} elseif ( false !== strpos( $l, 'consult' ) || false !== strpos( $l, 'strategy' ) ) {
+		$path = '/consulting-strategy/';
+	} elseif ( false !== strpos( $l, 'app' ) || false !== strpos( $l, 'iphone' ) || false !== strpos( $l, 'android' ) || false !== strpos( $l, 'design' ) ) {
+		$path = '/app-development/';
+	} else {
+		$path = '/contact/';
+	}
+
+	return site_url( $path );
 }

@@ -49,23 +49,23 @@ get_header();
 				<a class="button-link button-link--primary" href="<?php echo esc_url( home_url( '/contact/' ) ); ?>"><?php echo esc_html( $content['hero_cta_text'] ); ?></a>
 				</div>
 			</div>
-				<!-- Hero image tiles: add mockup-1.png, mockup-2.png, mockup-4.png in assets/images/hero/ -->
+				<!-- Hero image tiles: WebP images live in assets/images/hero/ -->
 				<?php $hero_img = get_template_directory_uri() . '/assets/images/hero/'; ?>
 				<div class="hero__media">
 					<div class="hero__col">
 						<figure class="hero__tile hero__tile--blue">
-							<img src="<?php echo esc_url( $hero_img . 'mockup-1.png' ); ?>" alt="<?php esc_attr_e( 'Pharmacy app on a phone', 'factor-2' ); ?>" width="800" height="818" decoding="async">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-1.webp' ); ?>" alt="<?php esc_attr_e( 'Pharmacy app on a phone', 'factor-2' ); ?>" width="560" height="573" decoding="async">
 						</figure>
 						<figure class="hero__tile hero__tile--orange">
-							<img src="<?php echo esc_url( $hero_img . 'mockup-3.png' ); ?>" alt="<?php esc_attr_e( 'Retail dashboard on a laptop', 'factor-2' ); ?>" width="831" height="564" decoding="async">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-3.webp' ); ?>" alt="<?php esc_attr_e( 'Retail dashboard on a laptop', 'factor-2' ); ?>" width="560" height="380" decoding="async">
 						</figure>
 					</div>
 					<div class="hero__col hero__col--offset">
 						<figure class="hero__tile hero__tile--purple">
-							<img src="<?php echo esc_url( $hero_img . 'mockup-2.png' ); ?>" alt="<?php esc_attr_e( 'Inventory dashboard on a tablet', 'factor-2' ); ?>" width="906" height="585" decoding="async">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-2.webp' ); ?>" alt="<?php esc_attr_e( 'Inventory dashboard on a tablet', 'factor-2' ); ?>" width="560" height="362" decoding="async">
 						</figure>
 						<figure class="hero__tile hero__tile--red">
-							<img src="<?php echo esc_url( $hero_img . 'mockup-4.png' ); ?>" alt="<?php esc_attr_e( 'Restaurant management app on a phone', 'factor-2' ); ?>" width="792" height="645" decoding="async">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-4.webp' ); ?>" alt="<?php esc_attr_e( 'Restaurant management app on a phone', 'factor-2' ); ?>" width="560" height="456" decoding="async">
 						</figure>
 					</div>
 				</div>
@@ -206,6 +206,7 @@ get_header();
 
 	<!-- Intro/Audience Section -->
 	<section class="section section--intro" id="startups">
+		<?php if ( empty( $content['reasons'] ) ) : ?><span id="about"></span><?php endif; ?>
 		<div class="container">
 			<div class="section-heading text-center intro-statement">
 				<p class="intro-statement__copy">
@@ -255,9 +256,9 @@ get_header();
 		<section class="section bg-secondary home-services-section" id="services">
 			<div class="container">
 				<div class="section-heading">
-					<p class="section-kicker"><?php echo esc_html( $content['services_kicker'] ); ?></p>
-					<h2><?php echo esc_html( $content['services_heading'] ); ?></h2>
-					<p><?php echo esc_html( $content['services_description'] ); ?></p>
+					<?php if ( ! empty( $content['services_kicker'] ) ) : ?><p class="section-kicker"><?php echo esc_html( $content['services_kicker'] ); ?></p><?php endif; ?>
+					<?php if ( ! empty( $content['services_heading'] ) ) : ?><h2><?php echo esc_html( $content['services_heading'] ); ?></h2><?php endif; ?>
+					<?php if ( ! empty( $content['services_description'] ) ) : ?><p><?php echo esc_html( $content['services_description'] ); ?></p><?php endif; ?>
 				</div>
 
 				<div class="service-grid">

@@ -36,7 +36,7 @@ if ( empty( $tagline ) || 'Just another WordPress site' === $tagline ) {
 			--btn-consult-color: <?php echo get_theme_mod('f2_btn_consult_color', '#ffffff'); ?>;
 			--banner-bg: <?php echo get_theme_mod('f2_banner_bg', '#f7ffe8'); ?>;
 			--hero-banner-bg: <?php echo get_theme_mod('f2_hero_banner_bg', '#ffffff'); ?>;
-			--rotator-color: <?php echo get_theme_mod('f2_rotator_text_color', '#92C83D'); ?>;
+			--rotator-color: <?php echo get_theme_mod('f2_rotator_text_color', '#4d7a10'); ?>;
 			--rotator-prefix-size: <?php echo get_theme_mod('f2_rotator_prefix_size', '1.2'); ?>rem;
 			--rotator-text-size: <?php echo get_theme_mod('f2_rotator_text_size', '1.2'); ?>rem;
 		}

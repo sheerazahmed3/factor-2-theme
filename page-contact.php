@@ -17,12 +17,25 @@ $form_error     = false;
 
 if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['factor2_contact_nonce'] ) ) {
 	if ( wp_verify_nonce( $_POST['factor2_contact_nonce'], 'factor2_contact_submit' ) ) {
+		// Simple spam protection: hidden honeypot field, minimum fill time and a per-IP rate limit.
+		$honeypot       = isset( $_POST['contact_website'] ) ? trim( (string) $_POST['contact_website'] ) : '';
+		$rendered_at    = isset( $_POST['contact_ts'] ) ? (int) $_POST['contact_ts'] : 0;
+		$ip_key         = 'f2_contact_' . md5( isset( $_SERVER['REMOTE_ADDR'] ) ? (string) $_SERVER['REMOTE_ADDR'] : 'unknown' );
+		$attempts       = (int) get_transient( $ip_key );
+		$looks_like_bot = ( '' !== $honeypot ) || ( $rendered_at && ( time() - $rendered_at ) < 3 );
+		$rate_limited   = $attempts >= 3;
+
 		$name    = sanitize_text_field( $_POST['contact_name'] ?? '' );
 		$mobile  = sanitize_text_field( $_POST['contact_mobile'] ?? '' );
 		$email   = sanitize_email( $_POST['contact_email'] ?? '' );
 		$message = sanitize_textarea_field( $_POST['contact_message'] ?? '' );
 
-		if ( ! empty( $name ) && ! empty( $email ) && ! empty( $message ) ) {
+		if ( $looks_like_bot ) {
+			$form_submitted = true; // Pretend it worked so bots learn nothing.
+		} elseif ( $rate_limited ) {
+			$form_error = true;
+		} elseif ( ! empty( $name ) && ! empty( $email ) && ! empty( $message ) ) {
+			set_transient( $ip_key, $attempts + 1, 10 * MINUTE_IN_SECONDS );
 			$to      = get_theme_mod( 'f2_contact_email', get_option( 'admin_email' ) );
 			$subject = sprintf( '[%s] New Contact: %s', get_bloginfo( 'name' ), $name );
 			$body    = "Name: $name\n";
@@ -97,6 +110,11 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['factor2_contact_non
 
 						<form class="contact-form" action="<?php echo esc_url( get_permalink() ); ?>" method="POST">
 							<?php wp_nonce_field( 'factor2_contact_submit', 'factor2_contact_nonce' ); ?>
+								<input type="hidden" name="contact_ts" value="<?php echo esc_attr( time() ); ?>">
+								<div style="position:absolute;left:-9999px;" aria-hidden="true">
+									<label for="contact-website">Leave this field empty</label>
+									<input type="text" id="contact-website" name="contact_website" tabindex="-1" autocomplete="off" value="">
+								</div>
 							
 							<div class="form-group">
 								<label for="contact-name" class="screen-reader-text"><?php esc_html_e( 'Name', 'factor-2' ); ?></label>
@@ -120,7 +138,7 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] && isset( $_POST['factor2_contact_non
 							</button>
 
 							<p class="form-disclaimer">
-								<?php esc_html_e( 'This site is protected by reCAPTCHA and the Google', 'factor-2' ); ?> <a href="#"><?php esc_html_e( 'Privacy Policy', 'factor-2' ); ?></a> <?php esc_html_e( 'and', 'factor-2' ); ?> <a href="#"><?php esc_html_e( 'Terms of Service', 'factor-2' ); ?></a> <?php esc_html_e( 'apply.', 'factor-2' ); ?>
+								<?php esc_html_e( 'We only use your details to reply to your message.', 'factor-2' ); ?>
 							</p>
 						</form>
 					<?php endif; ?>

@@ -1149,7 +1149,7 @@ function factor_2_customize_register($wp_customize)
 
 	// Rotating Text Color
 	$wp_customize->add_setting('f2_rotator_text_color', array(
-		'default' => '#92C83D',
+		'default' => '#4d7a10',
 		'sanitize_callback' => 'sanitize_hex_color',
 	));
 	$wp_customize->add_control(new WP_Customize_Color_Control($wp_customize, 'f2_rotator_text_color', array(

@@ -34,7 +34,7 @@ $content   = factor_2_get_homepage_content();
 				<h3><?php esc_html_e( 'Quick Links', 'factor-2' ); ?></h3>
 				<ul>
 					<?php foreach ( $content['quick_links'] as $link ) : ?>
-						<li><a href="#"><?php echo esc_html( $link ); ?></a></li>
+						<li><a href="<?php echo esc_url( factor_2_quick_link_url( $link ) ); ?>"><?php echo esc_html( $link ); ?></a></li>
 					<?php endforeach; ?>
 				</ul>
 			</div>

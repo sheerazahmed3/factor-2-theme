@@ -31,7 +31,7 @@ Text Domain: appexeon3
   --accent-light: rgba(145, 199, 61, 0.1);
 
   --btn-primary-bg: var(--accent-primary);
-  --btn-primary-color: var(--text-inverse);
+  --btn-primary-color: var(--text-primary); /* dark label on the light green: 7:1 contrast */
   --btn-consult-bg: #444;
   --btn-consult-color: #ffffff;
   --banner-bg: #f7ffe8;
@@ -2363,4 +2363,30 @@ body.nav-is-open .site-header {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
+}
+
+
+/* ==========================================================================
+   Accessibility: readable green on light backgrounds (homepage) and button labels
+   ========================================================================== */
+:root {
+  --accent-text: #4d7a10; /* 5:1 on white and on the light green background */
+}
+
+.button-link--primary:hover {
+  color: var(--text-primary);
+}
+
+.home .section-kicker,
+.home .eyebrow,
+.home .service-card__link,
+.home .review-card__role,
+.home .home-value-strip__number,
+.home .site-navigation__list a:hover {
+  color: var(--accent-text);
+}
+
+.home .text-rotator,
+.home .text-rotator__item {
+  color: var(--rotator-color);
 }
