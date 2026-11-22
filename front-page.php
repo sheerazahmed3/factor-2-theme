@@ -61,7 +61,9 @@ get_header();
 						</figure>
 					</div>
 					<div class="hero__col hero__col--offset">
-						<figure class="hero__tile hero__tile--purple"></figure>
+						<figure class="hero__tile hero__tile--purple">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-2.png' ); ?>" alt="<?php esc_attr_e( 'Inventory dashboard on a tablet', 'factor-2' ); ?>" width="906" height="585" decoding="async">
+						</figure>
 						<figure class="hero__tile hero__tile--red">
 							<img src="<?php echo esc_url( $hero_img . 'mockup-4.png' ); ?>" alt="<?php esc_attr_e( 'Restaurant management app on a phone', 'factor-2' ); ?>" width="792" height="645" decoding="async">
 						</figure>
