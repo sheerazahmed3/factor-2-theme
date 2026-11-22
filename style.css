@@ -2201,6 +2201,11 @@ body.nav-is-open .site-header {
   object-fit: cover;
 }
 
+/* Phone image has transparent edges: show it whole on the coloured tile */
+.hero__tile--blue img {
+  object-fit: contain;
+}
+
 /* Tile colours and shapes (empty tiles show their colour until an image is added) */
 .hero__tile--blue   { background: #1e96f0; aspect-ratio: 666 / 636; }
 .hero__tile--orange { background: #ff8a00; aspect-ratio: 831 / 564; }

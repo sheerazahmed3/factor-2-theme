@@ -53,7 +53,9 @@ get_header();
 				<?php $hero_img = get_template_directory_uri() . '/assets/images/hero/'; ?>
 				<div class="hero__media">
 					<div class="hero__col">
-						<figure class="hero__tile hero__tile--blue"></figure>
+						<figure class="hero__tile hero__tile--blue">
+							<img src="<?php echo esc_url( $hero_img . 'mockup-1.png' ); ?>" alt="<?php esc_attr_e( 'Pharmacy app on a phone', 'factor-2' ); ?>" width="800" height="818" decoding="async">
+						</figure>
 						<figure class="hero__tile hero__tile--orange">
 							<img src="<?php echo esc_url( $hero_img . 'mockup-3.png' ); ?>" alt="<?php esc_attr_e( 'Retail dashboard on a laptop', 'factor-2' ); ?>" width="831" height="564" decoding="async">
 						</figure>
