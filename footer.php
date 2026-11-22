@@ -17,7 +17,11 @@ $content   = factor_2_get_homepage_content();
 			<div class="footer-col">
 				<h3><?php esc_html_e( 'Offices', 'factor-2' ); ?></h3>
 				<?php foreach ( $content['offices'] as $office ) : ?>
-					<p><?php echo esc_html( $office ); ?></p>
+					<?php if ( preg_match( '/^[\d\s\-\+\(\)]{9,}$/', trim( $office ) ) ) : ?>
+						<p><a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $office ) ); ?>"><?php echo esc_html( $office ); ?></a></p>
+					<?php else : ?>
+						<p><?php echo esc_html( $office ); ?></p>
+					<?php endif; ?>
 				<?php endforeach; ?>
 			</div>
 

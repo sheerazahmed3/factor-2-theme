@@ -2390,3 +2390,183 @@ body.nav-is-open .site-header {
 .home .text-rotator__item {
   color: var(--rotator-color);
 }
+
+
+/* ==========================================================================
+   Mobile optimisation
+   ========================================================================== */
+
+/* A plain "1fr" column can grow wider than the screen when a child has long content. */
+.hero {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.hero__copy,
+.hero__rotator,
+.hero .text-rotator {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  /* Rotating phrases on the service pages are set at 1.25rem inline; keep them inside the screen */
+  .hero--service .text-rotator,
+  .consulting-strategy-page .hero__rotator span {
+    font-size: 1rem !important;
+  }
+}
+
+/* Footer links: readable on the dark background */
+.footer-col p,
+.footer-col a {
+  color: #94a3b8;
+}
+
+.footer-col a:hover {
+  color: var(--accent-primary);
+}
+
+@media (max-width: 991px) {
+  /* Bigger tap area for the menu button */
+  .nav-toggle {
+    padding: 14px 10px;
+  }
+
+  /* Contact link in the open menu becomes a proper button */
+  .site-navigation__list .menu-item-cta a {
+    color: var(--text-primary);
+    background: var(--accent-primary) !important;
+    border-radius: var(--radius-pill);
+    justify-content: center;
+    padding: 0.9rem 1.25rem !important;
+    min-height: 48px;
+    margin-top: 1.25rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero.hero--split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Service pages with fixed two-column layouts set inline */
+  .offerings-section .offerings-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 2.5rem !important;
+  }
+
+  .offerings-nav,
+  .offerings-content-wrap {
+    min-width: 0;
+  }
+
+  .offerings-section {
+    padding: 4rem 0 !important;
+  }
+
+  .offerings-nav h2 {
+    font-size: clamp(2rem, 8vw, 3.3rem) !important;
+    margin-bottom: 2rem !important;
+  }
+
+  .offerings-content-wrap {
+    padding: 1.75rem !important;
+    min-height: 0 !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* Homepage: keep the rotating phrase on the same left edge as the text above it */
+  .hero--split .text-rotator__item {
+    justify-content: flex-start;
+    text-align: left;
+  }
+
+  /* Big headings and spacing that are set inline on the service pages */
+  .consulting-strategy-page .hero__copy h1 {
+    font-size: clamp(2rem, 9vw, 3.6rem) !important;
+    margin-bottom: 1.25rem !important;
+  }
+
+  .consulting-strategy-page .hero__rotator {
+    margin: 2rem 0 2.5rem !important;
+  }
+
+  [style*="font-size: 3rem"],
+  [style*="font-size: 3.3rem"],
+  [style*="font-size: 3.5rem"],
+  [style*="font-size: 2.75rem"],
+  [style*="font-size: 4rem"] {
+    font-size: clamp(1.9rem, 8.5vw, 3rem) !important;
+    line-height: 1.15 !important;
+  }
+
+  [style*="padding: 6rem 0"],
+  [style*="padding: 10rem"] {
+    padding-top: 3.5rem !important;
+    padding-bottom: 3.5rem !important;
+  }
+
+  /* Consultation banner */
+  .consult-banner h2 {
+    font-size: 1.9rem;
+    line-height: 1.2;
+    margin-bottom: 1.25rem;
+  }
+
+  .consult-banner {
+    padding: 3rem 1.25rem;
+  }
+
+  /* Footer: tighter, with comfortable tap targets */
+  .site-footer {
+    padding: 3rem 1.25rem 1.5rem;
+  }
+
+  .site-footer__grid {
+    margin: 2rem auto;
+    gap: 1.5rem;
+  }
+
+  .footer-col h3 {
+    margin-bottom: 0.5rem;
+  }
+
+  .footer-col a {
+    padding: 0.6rem 0;
+    margin-bottom: 0;
+  }
+
+  .footer-col p {
+    margin-bottom: 0.5rem;
+  }
+}
+
+
+/* Very small phones (320-400px) */
+@media (max-width: 400px) {
+  .site-header .site-branding-container .custom-logo-link img,
+  .site-header .site-branding-container .custom-logo {
+    width: 200px !important;
+    max-width: 200px !important;
+    height: auto !important;
+  }
+
+  .hero h1,
+  .hero__copy h1 {
+    font-size: clamp(1.75rem, 9.5vw, 2.4rem) !important;
+    overflow-wrap: break-word;
+  }
+
+  h2,
+  h3 {
+    overflow-wrap: break-word;
+  }
+}
+
+
+/* Dark video hero: use a light green for the rotating phrase so it stays readable */
+.hero.has-video-bg .text-rotator,
+.hero.has-video-bg .text-rotator__item {
+  color: #a6d65a;
+}
